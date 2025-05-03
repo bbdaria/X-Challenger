@@ -1,3 +1,3 @@
 # X-Challenger
 
-## 
+## Type shit
