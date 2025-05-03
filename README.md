@@ -4,4 +4,4 @@
 
 How do we want to recognize text? the user doesn't need to copy and paste!
 
-[IMG_808D7E1442CB-1.jpeg]
+![image](https://github.com/user-attachments/assets/5619a4fe-1314-4894-865a-0efae5d03442)
