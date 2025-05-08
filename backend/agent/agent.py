@@ -1,4 +1,5 @@
 import openai
+from agents import Agent, Runner
 import os
 
 class OpenAIAgent:
@@ -7,11 +8,8 @@ class OpenAIAgent:
         self.api_key = os.getenv("OPENAI_API_KEY")
         if not self.api_key:
             raise ValueError("OPENAI_API_KEY is not set")
-        openai.api_key = self.api_key
+        self.agent = Agent(name="Assistant", instructions="You are a helpful assistant")
 
-    def act(self, prompt):
-        response = openai.ChatCompletion.create(
-            model=self.model,
-            messages=[{"role": "user", "content": prompt}]
-        )
-        return response.choices[0].message["content"].strip()
+    async def act(self, input):
+        runner = await Runner(self.agent, input)
+        return runner.output

@@ -1,15 +1,32 @@
 from typing import Any
+import tensorflow as tf
 
 class ImageClassifier:
     def __init__(self, model_path: str = None):
-        # Load your model here if you have one
-        self.model_path = model_path
-        self.model = None  # Placeholder for the actual model
+        MODEL_PATH = 'ai_imageclassifier.h5'
+        self.model = tf.keras.models.load_model(MODEL_PATH)
 
-    def predict(self, image: Any) -> str:
+    def classify_image(self, image_path):
         """
-        Classify the input image and return a label.
-        'image' can be a file path, PIL image, or numpy array depending on your use case.
+        Classify a single image as REAL or AI-generated (FAKE).
+        Args:
+            image_path (str): Path to the image file.
+        Returns:
+            str: 'REAL' or 'AI'
         """
-        # TODO: Add real model inference here
-        return "fake"  # or "real"
+        # Load and preprocess the image
+        img = cv2.imread(image_path)
+        if img is None:
+            print(f"Error: Could not load image at {image_path}")
+            return None
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img_resized = tf.image.resize(img, (32, 32)).numpy()
+        img_norm = img_resized / 255.0
+        img_input = np.expand_dims(img_norm, axis=0)
+
+        # Predict
+        y_pred = model.predict(img_input)
+        label = 'REAL' if y_pred > 0.5 else 'AI'
+        print(f"Prediction: {label} (score: {float(y_pred):.4f})")
+        return label
+

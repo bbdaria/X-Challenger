@@ -31,10 +31,3 @@ def classify_image(image_path):
     label = 'REAL' if y_pred > 0.5 else 'AI'
     print(f"Prediction: {label} (score: {float(y_pred):.4f})")
     return label
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python predict.py path/to/image.jpg")
-        sys.exit(1)
-    image_path = sys.argv[1]
-    classify_image(image_path) 
