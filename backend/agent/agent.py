@@ -2,8 +2,11 @@ import openai
 from agents import Agent, Runner
 import os
 
+from dotenv import load_dotenv
+load_dotenv()
+
 class OpenAIAgent:
-    def __init__(self, model="o4-mini", instruction_file="prompt.py"):
+    def __init__(self, model="o4-mini", instruction_file=os.path.abspath(os.path.join(os.path.dirname(__file__), "prompt.j2"))):
         self.model = model
         self.api_key = os.getenv("OPENAI_API_KEY")
         if not self.api_key:

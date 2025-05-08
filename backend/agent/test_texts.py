@@ -1,9 +1,10 @@
 from agent.agent import OpenAIAgent
 import os
+import asyncio
 
 fact_checker = OpenAIAgent()
 
-output = fact_checker.act("am i gay")
+output = asyncio.run(fact_checker.act("am i gay"))
 
 print(output)
 
