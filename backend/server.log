@@ -550,3 +550,10 @@ asyncio.exceptions.CancelledError
 2025-05-09 01:29:59,463 INFO uvicorn.error Started server process [14161]
 2025-05-09 01:29:59,472 INFO uvicorn.error Waiting for application startup.
 2025-05-09 01:29:59,474 INFO uvicorn.error Application startup complete.
+2025-05-09 01:32:02,042 WARNING uvicorn.error StatReload detected changes in 'images/static_analyzer.py'. Reloading...
+2025-05-09 01:32:02,092 INFO uvicorn.error Shutting down
+2025-05-09 01:32:02,197 INFO uvicorn.error Waiting for application shutdown.
+2025-05-09 01:32:02,201 INFO uvicorn.error Application shutdown complete.
+2025-05-09 01:32:02,205 INFO uvicorn.error Finished server process [14161]
+2025-05-09 01:32:02,502 INFO root [Startup] Logging is configured and working!
+2025-05-09 01:32:09,273 INFO uvicorn.error Stopping reloader process [13931]
