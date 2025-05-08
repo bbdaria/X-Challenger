@@ -1,20 +1,41 @@
 from typing import Any
-import tensorflow as tf
 from .static_analyzer import StaticImageAnalyzer
-import cv2
+import torch
+from torchvision import transforms
+from PIL import Image
 import numpy as np
+import os
+import sys
+
+# Add TrueFake detector to sys.path for import
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../TrueFake-IJCNN25/detector')))
+from networks import ImageClassifier as TrueFakeImageClassifier
+
+class MinimalSettings:
+    def __init__(self):
+        self.arch = 'nodown'
+        self.freeze = False
+        self.prototype = True
+        self.num_centers = 1
 
 class ImageClassifier:
     def __init__(self, model_path: str = None):
-        MODEL_PATH = 'ai_imageclassifier.h5'
-        # Load model without compiling to avoid reduction='auto' error
-        self.model = tf.keras.models.load_model(MODEL_PATH, compile=False)
-        # Compile with a valid loss function
-        self.model.compile(
-            loss=tf.keras.losses.BinaryCrossentropy(reduction='sum_over_batch_size'),
-            optimizer='adam'
-        )
+        # Path to the best.pt model
+        MODEL_PATH = model_path or os.path.abspath(os.path.join(os.path.dirname(__file__), 'best.pt'))
         self.static_analyzer = StaticImageAnalyzer()
+        # Create settings object as expected by the model
+        settings = MinimalSettings()
+        self.model = TrueFakeImageClassifier(settings)
+        self.model.eval()
+        # Load weights
+        state_dict = torch.load(MODEL_PATH, map_location=torch.device('cpu'))
+        self.model.load_state_dict(state_dict)
+        # Preprocessing pipeline (match what TrueFake expects)
+        self.transform = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ])
 
     def classify_image(self, image_path):
         """
@@ -22,29 +43,28 @@ class ImageClassifier:
         Args:
             image_path (str): Path to the image file.
         Returns:
-            str: 'REAL' or 'AI'
+            dict: static analysis, prediction, score
         """
         # Step 1: Static analysis
         static_results = self.static_analyzer.analyze(image_path)
         print("Static analysis results:", static_results)
 
         # Load and preprocess the image
-        img = cv2.imread(image_path)
-        if img is None:
-            print(f"Error: Could not load image at {image_path}")
-            return None
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img_resized = tf.image.resize(img, (32, 32)).numpy()
-        img_norm = img_resized / 255.0
-        img_input = np.expand_dims(img_norm, axis=0)
+        img = Image.open(image_path).convert('RGB')
+        img_tensor = self.transform(img).unsqueeze(0)  # Add batch dimension
 
         # Predict
-        y_pred = self.model.predict(img_input)
-        label = 'REAL' if y_pred > 0.5 else 'AI'
-        print(f"Prediction: {label} (score: {float(y_pred):.4f})")
+        with torch.no_grad():
+            logit = self.model(img_tensor)
+            print(f"Raw model output tensor: {logit}")
+            logit_value = float(logit.item())
+            prob_fake = float(torch.sigmoid(logit).item())
+            label = 'FAKE' if logit_value > 0 else 'REAL'
+        print(f"Prediction: {label} (logit: {logit_value:.4f}, prob_fake: {prob_fake:.4f})")
         return {
             "static_analysis": static_results,
             "prediction": label,
-            "score": float(y_pred)
+            "logit": logit_value,
+            "prob_fake": prob_fake
         }
 
