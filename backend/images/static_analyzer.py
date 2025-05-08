@@ -2,6 +2,7 @@ import os
 import re
 import io
 from typing import Callable, Dict, List
+<<<<<<< HEAD
 from PIL import Image, ExifTags
 import xml.etree.ElementTree as ET
 import openai
@@ -10,13 +11,24 @@ import logging
 import subprocess
 import json
 import tempfile
+=======
+>>>>>>> ed4f353 (images)
 
-# Optional libraries for advanced detection
+from PIL import Image, ExifTags, ImageChops, ImageOps
+import xml.etree.ElementTree as ET
+import openai
+import base64
+import logging
+import subprocess
+import json
+
+# Optional imports
 try:
     from dalle_watermark import WatermarkDecoder
     DALL_E_DECODER = WatermarkDecoder()
 except ImportError:
     DALL_E_DECODER = None
+
 try:
     import pytesseract
 except ImportError:
@@ -31,17 +43,17 @@ except ImportError:
 logger = logging.getLogger("uvicorn.error")
 
 class StaticImageAnalyzer:
-    """
-    Analyze images for static signatures of AI generation:
-      - Invisible watermarks (DALL·E)
-      - C2PA / XMP metadata
-      - EXIF metadata clues (Software, Model, UserComment)
-      - OCR-based visible watermark text
-    """
+    """Analyze images for static AI signatures before invoking any CNN."""
+
     def __init__(self):
         self.analyzers: List[Callable[[str], Dict]] = []
         for fn in (
+<<<<<<< HEAD
             # self.detect_openai_api_watermark,  # Removed: not functional
+=======
+            self.detect_dalle_watermark,
+            self.detect_openai_api_watermark,
+>>>>>>> ed4f353 (images)
             self.detect_c2pa_metadata,
             self.detect_cr_symbol,
             self.detect_exif_metadata,
@@ -67,6 +79,46 @@ class StaticImageAnalyzer:
         return results
 
     @staticmethod
+<<<<<<< HEAD
+=======
+    def detect_dalle_watermark(image_path: str) -> Dict:
+        """
+        Invisible watermark used by DALL·E 2 & 3 via the 'dalle_watermark' library.
+        Returns a confidence score if found. :contentReference[oaicite:5]{index=5}
+        """
+        out = {"analyzer": "detect_dalle_watermark", "found": False}
+        if DALL_E_DECODER is None:
+            out["error"] = "dalle_watermark lib not installed"
+            return out
+        img = Image.open(image_path).convert("RGB")
+        score = DALL_E_DECODER.decode(img)  # proprietary decoder
+        out["score"] = float(score)
+        out["found"] = score > 0.75
+        return out
+
+    @staticmethod
+    def detect_openai_api_watermark(image_path: str) -> Dict:
+        """
+        Placeholder for OpenAI's official watermark detection API (launched May 2024) :contentReference[oaicite:6]{index=6}.
+        Requires OPENAI_API_KEY in env. 
+        """
+        out = {"analyzer": "detect_openai_api_watermark", "found": False}
+        if not OPENAI_AVAILABLE:
+            out["error"] = "openai library not installed"
+            return out
+        try:
+            with open(image_path, "rb") as f:
+                resp = openai.images.provenance.checkwatermark(file=f)
+            out.update({
+                "found": resp.get("watermarked", False),
+                "confidence": resp.get("confidence", None)
+            })
+        except Exception as e:
+            out["error"] = str(e)
+        return out
+
+    @staticmethod
+>>>>>>> ed4f353 (images)
     def detect_c2pa_metadata(image_path: str) -> Dict:
         """
         Scan for C2PA/XMP (invisible metadata) injected by DALL·E 3 :contentReference[oaicite:7]{index=7}:
@@ -172,6 +224,7 @@ class StaticImageAnalyzer:
     def detect_c2pa_provenance(image_path: str) -> Dict:
         """
         Uses the c2patool CLI to check for C2PA provenance and watermark info.
+<<<<<<< HEAD
         Converts non-JPEG images to JPEG for compatibility.
         Handles 'No claim found' as a valid, non-error result.
         """
@@ -224,3 +277,36 @@ class StaticImageAnalyzer:
                 except Exception as cleanup_e:
                     logger.warning(f"[C2PA provenance] Failed to remove temp JPEG: {cleanup_e}")
         return out
+=======
+        """
+        logger = logging.getLogger(__name__)
+        out = {"analyzer": "detect_c2pa_provenance", "found": False, "provenance": None, "error": None}
+        try:
+            cmd = ["c2patool", image_path, "--", "--json"]
+            logger.info(f"[C2PA provenance] Running command: {' '.join(cmd)}")
+            result = subprocess.run(
+                cmd,
+                capture_output=True, text=True, check=True
+            )
+            logger.info(f"[c2patool output] {result.stdout}")
+            try:
+                data = json.loads(result.stdout)
+                if data.get("manifests"):
+                    out["found"] = True
+                    out["provenance"] = data["manifests"]
+                else:
+                    out["found"] = False
+            except json.JSONDecodeError as je:
+                out["error"] = f"Invalid JSON from c2patool: {je}"
+                logger.error(f"[C2PA provenance] Invalid JSON: {je}\nOutput: {result.stdout}")
+        except FileNotFoundError:
+            out["error"] = "c2patool CLI not found. Please install c2patool and ensure it is in your PATH."
+            logger.error("[C2PA provenance] c2patool CLI not found.")
+        except subprocess.CalledProcessError as e:
+            out["error"] = f"c2patool failed: {e.stderr}"
+            logger.error(f"[C2PA provenance] c2patool failed: {e.stderr}")
+        except Exception as e:
+            out["error"] = str(e)
+            logger.error(f"[C2PA provenance] Error: {e}")
+        return out
+>>>>>>> ed4f353 (images)

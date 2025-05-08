@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2025-05-08 23:45:57,692 INFO root [Startup] Logging is configured and working!
 2025-05-08 23:46:03,811 INFO __main__ Starting FastAPI server with Uvicorn...
 2025-05-08 23:46:03,813 INFO uvicorn.error Will watch for changes in these directories: ['/mnt/c/Users/Lior/PycharmProjects/X-Challenger/backend']
@@ -71,11 +72,95 @@
 2025-05-08 23:50:36,049 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_c2pa_provenance
 2025-05-08 23:50:36,051 INFO images.static_analyzer [C2PA provenance] Running command: c2patool /tmp/tmpbof47aun.png info
 2025-05-08 23:50:36,057 ERROR images.static_analyzer [C2PA provenance] c2patool failed: error: unexpected argument 'info' found
+=======
+2025-05-08 23:11:41,549 INFO uvicorn.error Starting FastAPI server with Uvicorn...
+2025-05-08 23:13:00,789 INFO main /image endpoint called
+2025-05-08 23:13:00,792 INFO main Downloading image from https://images.ctfassets.net/kftzwdyauwt9/7M8kf5SPYHBW2X9N46OGZv/bb75c40a6b7a4044665dcb874664ada2/hero_image1-whiteboard2.png?w=1920&q=90&fm=webp
+2025-05-08 23:13:01,236 INFO main Image downloaded to /tmp/tmp8exshsof.png
+2025-05-08 23:13:03,882 INFO main Classifying image: /tmp/tmp8exshsof.png
+2025-05-08 23:13:04,986 INFO main Classification result: {'result': 'real', 'prob_fake': 0.15348897874355316}
+2025-05-08 23:13:04,988 INFO main Temporary file /tmp/tmp8exshsof.png removed
+2025-05-08 23:13:47,538 INFO main /image endpoint called
+2025-05-08 23:13:47,541 INFO main Downloading image from https://images.ctfassets.net/kftzwdyauwt9/7M8kf5SPYHBW2X9N46OGZv/bb75c40a6b7a4044665dcb874664ada2/hero_image1-whiteboard2.png?w=1920&q=90&fm=webp
+2025-05-08 23:13:47,854 INFO main Image downloaded to /tmp/tmpl5_d5g7r.png
+2025-05-08 23:13:49,530 INFO main Classifying image: /tmp/tmpl5_d5g7r.png
+2025-05-08 23:13:50,451 INFO main Classification result: {'result': 'real', 'prob_fake': 0.15348897874355316}
+2025-05-08 23:13:50,453 INFO main Temporary file /tmp/tmpl5_d5g7r.png removed
+2025-05-08 23:41:21,152 INFO __main__ Starting FastAPI server with Uvicorn...
+2025-05-08 23:41:21,154 INFO uvicorn.error Will watch for changes in these directories: ['/mnt/c/Users/Lior/PycharmProjects/X-Challenger/backend']
+2025-05-08 23:41:21,156 INFO uvicorn.error Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-05-08 23:41:21,157 INFO uvicorn.error Started reloader process [10680] using StatReload
+2025-05-08 23:41:27,746 INFO uvicorn.error Started server process [10701]
+2025-05-08 23:41:27,749 INFO uvicorn.error Waiting for application startup.
+2025-05-08 23:41:27,752 INFO uvicorn.error Application startup complete.
+2025-05-08 23:41:43,955 INFO main /image endpoint called
+2025-05-08 23:41:43,960 INFO main Downloading image from https://images.ctfassets.net/kftzwdyauwt9/7M8kf5SPYHBW2X9N46OGZv/bb75c40a6b7a4044665dcb874664ada2/hero_image1-whiteboard2.png?w=1920&q=90&fm=webp
+2025-05-08 23:41:44,385 INFO main Image downloaded to /tmp/tmpo48f_gzw.png
+2025-05-08 23:41:45,061 INFO uvicorn.error Loading model weights from /mnt/c/Users/Lior/PycharmProjects/X-Challenger/backend/images/best.pt
+2025-05-08 23:41:47,124 INFO uvicorn.error Model loaded and set to eval mode.
+2025-05-08 23:41:47,129 INFO main Classifying image: /tmp/tmpo48f_gzw.png
+2025-05-08 23:41:47,132 INFO uvicorn.error Classifying image: /tmp/tmpo48f_gzw.png
+2025-05-08 23:41:47,135 INFO uvicorn.error [StaticImageAnalyzer] Analyzing image: /tmp/tmpo48f_gzw.png
+2025-05-08 23:41:47,138 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_dalle_watermark
+2025-05-08 23:41:47,142 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_openai_api_watermark
+2025-05-08 23:41:47,243 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_c2pa_metadata
+2025-05-08 23:41:47,245 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_cr_symbol
+2025-05-08 23:41:47,374 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_exif_metadata
+2025-05-08 23:41:47,378 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_software_tag
+2025-05-08 23:41:47,382 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_ocr_watermark
+2025-05-08 23:41:47,384 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_c2pa_provenance
+2025-05-08 23:41:47,391 ERROR images.static_analyzer [C2PA provenance] c2patool failed: error: unexpected argument '--json' found
+
+  tip: to pass '--json' as a value, use '-- --json'
+
+Usage: c2patool <--manifest <MANIFEST>|--output <OUTPUT>|--parent <PARENT>|--config <CONFIG>|--detailed|--force|PATH|--remote <REMOTE>|--sidecar|--ingredient|--tree|--certs|--no_signing_verify|--info|--signer-path <SIGNER_PATH>|--reserve-size <RESERVE_SIZE>>
+
+For more information, try '--help'.
+
+2025-05-08 23:41:47,393 INFO uvicorn.error Static analysis results: [{'analyzer': 'detect_dalle_watermark', 'found': False, 'error': 'dalle_watermark lib not installed'}, {'analyzer': 'detect_openai_api_watermark', 'found': False, 'error': "'Images' object has no attribute 'provenance'"}, {'analyzer': 'detect_c2pa_metadata', 'found': False, 'details': {}}, {'analyzer': 'detect_cr_symbol', 'found': False, 'text': '', 'error': 'pytesseract not installed'}, {'analyzer': 'detect_exif_metadata', 'ai_related': False, 'tags': []}, {'analyzer': 'detect_software_tag', 'found': False, 'software': None}, {'analyzer': 'detect_ocr_watermark', 'found': False, 'text': '', 'error': 'pytesseract not installed'}, {'analyzer': 'detect_c2pa_provenance', 'found': False, 'provenance': None, 'error': "c2patool failed: error: unexpected argument '--json' found\n\n  tip: to pass '--json' as a value, use '-- --json'\n\nUsage: c2patool <--manifest <MANIFEST>|--output <OUTPUT>|--parent <PARENT>|--config <CONFIG>|--detailed|--force|PATH|--remote <REMOTE>|--sidecar|--ingredient|--tree|--certs|--no_signing_verify|--info|--signer-path <SIGNER_PATH>|--reserve-size <RESERVE_SIZE>>\n\nFor more information, try '--help'.\n"}]
+2025-05-08 23:41:48,069 INFO uvicorn.error CNN prediction: result=real, prob_fake=0.15348897874355316
+2025-05-08 23:41:48,071 INFO main Classification result: {'result': 'real', 'prob_fake': 0.15348897874355316}
+2025-05-08 23:41:48,073 INFO main Temporary file /tmp/tmpo48f_gzw.png removed
+2025-05-08 23:41:48,077 INFO uvicorn.access 127.0.0.1:59158 - "POST /image HTTP/1.1" 200
+2025-05-08 23:42:44,942 WARNING uvicorn.error StatReload detected changes in 'images/static_analyzer.py'. Reloading...
+2025-05-08 23:42:44,997 INFO uvicorn.error Shutting down
+2025-05-08 23:42:45,101 INFO uvicorn.error Waiting for application shutdown.
+2025-05-08 23:42:45,105 INFO uvicorn.error Application shutdown complete.
+2025-05-08 23:42:45,107 INFO uvicorn.error Finished server process [10701]
+2025-05-08 23:42:48,062 WARNING uvicorn.error StatReload detected changes in 'images/static_analyzer.py'. Reloading...
+2025-05-08 23:42:51,052 INFO uvicorn.error Stopping reloader process [10680]
+2025-05-08 23:43:01,720 INFO __main__ Starting FastAPI server with Uvicorn...
+2025-05-08 23:43:01,721 INFO uvicorn.error Will watch for changes in these directories: ['/mnt/c/Users/Lior/PycharmProjects/X-Challenger/backend']
+2025-05-08 23:43:01,723 INFO uvicorn.error Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-05-08 23:43:01,724 INFO uvicorn.error Started reloader process [10778] using StatReload
+2025-05-08 23:43:08,200 INFO uvicorn.error Started server process [10806]
+2025-05-08 23:43:08,202 INFO uvicorn.error Waiting for application startup.
+2025-05-08 23:43:08,203 INFO uvicorn.error Application startup complete.
+2025-05-08 23:43:08,906 INFO main /image endpoint called
+2025-05-08 23:43:08,909 INFO main Downloading image from https://images.ctfassets.net/kftzwdyauwt9/7M8kf5SPYHBW2X9N46OGZv/bb75c40a6b7a4044665dcb874664ada2/hero_image1-whiteboard2.png?w=1920&q=90&fm=webp
+2025-05-08 23:43:09,312 INFO main Image downloaded to /tmp/tmpk7f068tr.png
+2025-05-08 23:43:09,993 INFO uvicorn.error Loading model weights from /mnt/c/Users/Lior/PycharmProjects/X-Challenger/backend/images/best.pt
+2025-05-08 23:43:11,523 INFO uvicorn.error Model loaded and set to eval mode.
+2025-05-08 23:43:11,526 INFO main Classifying image: /tmp/tmpk7f068tr.png
+2025-05-08 23:43:11,528 INFO uvicorn.error Classifying image: /tmp/tmpk7f068tr.png
+2025-05-08 23:43:11,529 INFO uvicorn.error [StaticImageAnalyzer] Analyzing image: /tmp/tmpk7f068tr.png
+2025-05-08 23:43:11,531 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_dalle_watermark
+2025-05-08 23:43:11,533 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_openai_api_watermark
+2025-05-08 23:43:11,617 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_c2pa_metadata
+2025-05-08 23:43:11,620 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_cr_symbol
+2025-05-08 23:43:11,728 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_exif_metadata
+2025-05-08 23:43:11,732 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_software_tag
+2025-05-08 23:43:11,736 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_ocr_watermark
+2025-05-08 23:43:11,739 INFO uvicorn.error [StaticImageAnalyzer] Running analyzer: detect_c2pa_provenance
+2025-05-08 23:43:11,742 INFO images.static_analyzer [C2PA provenance] Running command: c2patool /tmp/tmpk7f068tr.png -- --json
+2025-05-08 23:43:11,767 ERROR images.static_analyzer [C2PA provenance] c2patool failed: error: unexpected argument '--json' found
+>>>>>>> ed4f353 (images)
 
 Usage: c2patool [OPTIONS] <PATH> [COMMAND]
 
 For more information, try '--help'.
 
+<<<<<<< HEAD
 2025-05-08 23:50:36,060 INFO main Static analysis results: [{'analyzer': 'detect_openai_api_watermark', 'found': False, 'error': "'Images' object has no attribute 'provenance'"}, {'analyzer': 'detect_c2pa_metadata', 'found': False, 'details': {}}, {'analyzer': 'detect_cr_symbol', 'found': False, 'text': '', 'error': "tesseract is not installed or it's not in your PATH. See README file for more information."}, {'analyzer': 'detect_exif_metadata', 'ai_related': False, 'tags': []}, {'analyzer': 'detect_software_tag', 'found': False, 'software': None}, {'analyzer': 'detect_ocr_watermark', 'error': "tesseract is not installed or it's not in your PATH. See README file for more information."}, {'analyzer': 'detect_c2pa_provenance', 'found': False, 'provenance': None, 'error': "c2patool failed: error: unexpected argument 'info' found\n\nUsage: c2patool [OPTIONS] <PATH> [COMMAND]\n\nFor more information, try '--help'.\n"}]
 2025-05-08 23:50:37,602 INFO main Classifying image: /tmp/tmpbof47aun.png
 2025-05-08 23:50:37,606 INFO uvicorn.error [StaticImageAnalyzer] Analyzing image: /tmp/tmpbof47aun.png
@@ -557,3 +642,18 @@ asyncio.exceptions.CancelledError
 2025-05-09 01:32:02,205 INFO uvicorn.error Finished server process [14161]
 2025-05-09 01:32:02,502 INFO root [Startup] Logging is configured and working!
 2025-05-09 01:32:09,273 INFO uvicorn.error Stopping reloader process [13931]
+=======
+2025-05-08 23:43:11,768 INFO uvicorn.error Static analysis results: [{'analyzer': 'detect_dalle_watermark', 'found': False, 'error': 'dalle_watermark lib not installed'}, {'analyzer': 'detect_openai_api_watermark', 'found': False, 'error': "'Images' object has no attribute 'provenance'"}, {'analyzer': 'detect_c2pa_metadata', 'found': False, 'details': {}}, {'analyzer': 'detect_cr_symbol', 'found': False, 'text': '', 'error': 'pytesseract not installed'}, {'analyzer': 'detect_exif_metadata', 'ai_related': False, 'tags': []}, {'analyzer': 'detect_software_tag', 'found': False, 'software': None}, {'analyzer': 'detect_ocr_watermark', 'found': False, 'text': '', 'error': 'pytesseract not installed'}, {'analyzer': 'detect_c2pa_provenance', 'found': False, 'provenance': None, 'error': "c2patool failed: error: unexpected argument '--json' found\n\nUsage: c2patool [OPTIONS] <PATH> [COMMAND]\n\nFor more information, try '--help'.\n"}]
+2025-05-08 23:43:12,315 INFO uvicorn.error CNN prediction: result=real, prob_fake=0.15348897874355316
+2025-05-08 23:43:12,318 INFO main Classification result: {'result': 'real', 'prob_fake': 0.15348897874355316}
+2025-05-08 23:43:12,319 INFO main Temporary file /tmp/tmpk7f068tr.png removed
+2025-05-08 23:43:12,323 INFO uvicorn.access 127.0.0.1:44430 - "POST /image HTTP/1.1" 200
+2025-05-08 23:43:28,322 WARNING uvicorn.error StatReload detected changes in 'images/classifier.py'. Reloading...
+2025-05-08 23:43:28,423 INFO uvicorn.error Shutting down
+2025-05-08 23:43:28,529 INFO uvicorn.error Waiting for application shutdown.
+2025-05-08 23:43:28,531 INFO uvicorn.error Application shutdown complete.
+2025-05-08 23:43:28,533 INFO uvicorn.error Finished server process [10806]
+2025-05-08 23:43:34,902 INFO uvicorn.error Started server process [10843]
+2025-05-08 23:43:34,904 INFO uvicorn.error Waiting for application startup.
+2025-05-08 23:43:34,907 INFO uvicorn.error Application startup complete.
+>>>>>>> ed4f353 (images)

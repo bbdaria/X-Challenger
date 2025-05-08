@@ -3,6 +3,7 @@ import sys
 import argparse
 from pathlib import Path
 from typing import Any, Dict
+import logging
 
 import torch
 from PIL import Image
@@ -11,6 +12,8 @@ from torchvision import transforms
 # Static analyzer for metadata/watermarks
 from .static_analyzer import StaticImageAnalyzer
 from .networks import ImageClassifier as TrueFakeImageClassifier
+
+logger = logging.getLogger("uvicorn.error")
 
 class MinimalSettings:
     """
@@ -45,9 +48,11 @@ class Wrapper:
         settings = MinimalSettings()
         self.classifier = TrueFakeImageClassifier(settings)
         # Load pretrained weights
+        logger.info(f"Loading model weights from {self.ckpt}")
         state = torch.load(self.ckpt, map_location='cpu')
         self.classifier.load_state_dict(state)
         self.classifier.eval()
+        logger.info("Model loaded and set to eval mode.")
 
         # Preprocessing pipeline matching training setup
         self.transform = transforms.Compose([
@@ -61,11 +66,14 @@ class Wrapper:
         ])
 
     def classify_image(self, image_path: str) -> Dict[str, Any]:
+        logger.info(f"Classifying image: {image_path}")
         # 1) Static analysis
         static_out = self.static_analyzer.analyze(image_path)
+        logger.info(f"Static analysis results: {static_out}")
         for res in static_out:
             if (res.get('analyzer') == 'analyze_metadata' and res.get('ai_related')) or \
                (res.get('analyzer') == 'detect_watermark' and res.get('found')):
+                logger.info(f"Static analysis detected fake: {res}")
                 return {
                     'result': 'fake',
                     'model': res.get('details', 'unknown'),
@@ -73,12 +81,17 @@ class Wrapper:
                 }
 
         # 2) CNN inference
-        img = Image.open(image_path).convert('RGB')
-        tensor = self.transform(img).unsqueeze(0)
-        with torch.no_grad():
-            out = self.classifier(tensor)
-            prob_fake = float(torch.sigmoid(out * 5).item())
-            result = 'fake' if prob_fake > 0.5 else 'real'
+        try:
+            img = Image.open(image_path).convert('RGB')
+            tensor = self.transform(img).unsqueeze(0)
+            with torch.no_grad():
+                out = self.classifier(tensor)
+                prob_fake = float(torch.sigmoid(out * 5).item())
+                result = 'fake' if prob_fake > 0.5 else 'real'
+            logger.info(f"CNN prediction: result={result}, prob_fake={prob_fake}")
+        except Exception as e:
+            logger.error(f"Error during CNN inference: {e}")
+            return {'result': 'error', 'error': str(e)}
 
         if result == 'fake':
             return {
