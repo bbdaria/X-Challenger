@@ -13,20 +13,20 @@ app = FastAPI()
 @app.post("/text")
 async def read_root(request: Request):
     data = await request.json()
-    prompt = data.get("prompt")
-    response = agent.act(prompt)
+    text = data.get("text")
+    response = agent.act(text)
     return JSONResponse({"response": response})
 
 @app.post("/image")
 async def read_root(request: Request):
     data = await request.json()
     image_url = data.get("image_url")
-    prediction = image_classifier.predict(image_url)
+    prediction = image_classifier.classify_image(image_url)
     return JSONResponse({"prediction": prediction})
 
 
 def main():
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
 
 if __name__ == "__main__":
     load_dotenv()
