@@ -3,14 +3,14 @@ from fastapi.responses import JSONResponse
 import uvicorn
 from dotenv import load_dotenv
 from agent.agent import OpenAIAgent
-from images.classifier import ImageClassifier
+from images.classifier import Wrapper
 import requests
 import tempfile
 import os
 import random
 
+agent = None
 # agent = OpenAIAgent()
-image_classifier = ImageClassifier()
 
 app = FastAPI()
 
@@ -37,32 +37,16 @@ async def classify_image(request: Request):
         return JSONResponse({"error": f"Failed to download image: {e}"}, status_code=400)
 
     try:
-        classifier = ImageClassifier()
+        classifier = Wrapper()
         result = classifier.classify_image(tmp_path)
     finally:
         os.remove(tmp_path)
 
-    # Check static analysis for model info
-    model_name = None
-    for analysis in result.get("static_analysis", []):
-        # Example: look for a model in metadata details (customize as needed)
-        if analysis["analyzer"] == "analyze_metadata" and analysis.get("ai_related"):
-            model_name = analysis.get("details", "unknown")
-        if analysis["analyzer"] == "detect_watermark" and analysis.get("found"):
-            model_name = analysis.get("details", "unknown")
-    if result["prediction"] == "FAKE":
-        if model_name:
-            return JSONResponse({"result": "fake", "model": model_name})
-        else:
-            # Randomly choose a model
-            model = random.choice(["flux1.", "stable diffusion"])
-            return JSONResponse({"result": "fake", "model": model})
-    else:
-        return JSONResponse({"result": "real"})
+    return JSONResponse(result)
 
 
 def main():
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
 
 if __name__ == "__main__":
     load_dotenv()
