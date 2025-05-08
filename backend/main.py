@@ -9,7 +9,7 @@ import tempfile
 import os
 import random
 
-agent = OpenAIAgent()
+# agent = OpenAIAgent()
 image_classifier = ImageClassifier()
 
 app = FastAPI()
