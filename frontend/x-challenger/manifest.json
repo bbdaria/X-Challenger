@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "X:Challenger - the ",
+  "name": "X-Challenger",
   "version": "1.0",
   "description": "Scans text and pictures to help you determine their genuinity",
   "permissions": ["activeTab", "scripting","storage","tabs", "contextMenus", "webRequest"],
@@ -13,7 +13,17 @@
   "background": {
     "service_worker": "background.js"
   },
+  "action": {
+    "default_title": "X-Challenger",
+    "default_icon": {
+      "16": "cropped.png",
+      "48": "cropped.png",
+      "128": "cropped.png"
+    }
+  },
   "icons": {
-    "48": "cropped.png"
+    "16": "cropped.png",
+    "48": "cropped.png",
+    "128": "cropped.png"
   }
 }
