@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <header>
+      <div
+        style="
+          background-color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 5px;
+        "
+      >
+        <img src="ynet.png" alt="CS Net Logo" style="height: 160px" />
+      </div>
+    </header>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        direction: rtl;
+      }
+
+      header {
+        background-color: #ffffff;
+        color: white;
+        padding: 15px 20px;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .mainNav {
+        background-color: #ffffff;
+        border-bottom: 1px solid rgb(222, 26, 26);
+      }
+
+      .navList {
+        display: flex;
+        gap: 20px;
+        padding: 10px;
+        justify-content: center;
+      }
+
+      .navList div {
+        text-align: center;
+      }
+
+      .navList a {
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+      }
+
+      .wrapper {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
+      }
+
+      .top-story {
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 20px;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+      }
+
+      .top-story img {
+        width: 380px;
+        height: auto;
+        border-radius: 6px;
+        object-fit: cover;
+      }
+
+      .textDiv {
+        flex: 1;
+      }
+
+      .topStoryDate {
+        margin-bottom: 10px;
+        color: #555;
+        font-size: 14px;
+      }
+
+      .slotTitle {
+        font-size: 26px;
+        color: #000;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      .slotSubTitle {
+        font-size: 16px;
+        color: #333;
+        line-height: 1.6;
+        margin-bottom: 10px;
+      }
+
+      .author {
+        color: #999;
+        font-size: 14px;
+      }
+
+      .articles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+      }
+
+      .article-card {
+        background: white;
+        padding: 16px;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s;
+      }
+
+      .article-card:hover {
+        transform: translateY(-4px);
+      }
+
+      .article-card h3 {
+        font-size: 18px;
+        color: #333;
+      }
+
+      footer {
+        text-align: center;
+        background: #333;
+        color: white;
+        padding: 16px;
+        margin-top: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Main Navigation -->
+    <div class="mainNav" role="navigation" aria-label="Main Menu">
+      <div class="navList">
+        <div>
+          <a
+            class="selected"
+            id="HyfPsi95gel"
+            href="https://www.ynet.co.il/home/0,7340,L-8,00.html"
+            target="_top"
+            >ראשי</a
+          >
+        </div>
+        <div>
+          <a
+            id="rJ7voo5cglg"
+            href="https://www.ynet.co.il/plus"
+            target="_top"
+            aria-label="ynet - פלוס"
+            >+ynet</a
+          >
+        </div>
+        <div>
+          <a id="HyEwoo9clxe" href="https://www.ynet.co.il/news" target="_top"
+            >חדשות</a
+          >
+        </div>
+        <div>
+          <a
+            id="rJrwio99xge"
+            href="https://www.ynet.co.il/news/247"
+            target="_top"
+            >24/7</a
+          >
+        </div>
+        <div>
+          <a id="S1Lvsjc9xgg" href="https://www.ynet.co.il/radio" target="_top"
+            >פודקאסטים</a
+          >
+        </div>
+        <div>
+          <a
+            id="BJwDojc9egx"
+            href="https://www.ynet.co.il/economy"
+            target="_top"
+            >כלכלה</a
+          >
+        </div>
+        <div>
+          <a id="rkdwoo59xxg" href="https://www.ynet.co.il/sport" target="_top"
+            >ספורט</a
+          >
+        </div>
+        <div>
+          <a
+            id="H1twsjccxxg"
+            href="https://www.ynet.co.il/entertainment"
+            target="_top"
+            >תרבות</a
+          >
+        </div>
+        <div>
+          <a
+            id="BJcwoo5qegl"
+            href="https://pplus.ynet.co.il/homepage"
+            target="_top"
+            >רכילות</a
+          >
+        </div>
+        <div>
+          <a id="BJowsiqqxge" href="https://www.ynet.co.il/health" target="_top"
+            >בריאות</a
+          >
+        </div>
+        <div>
+          <a id="SJ2Dijqqxee" href="https://www.ynet.co.il/wheels" target="_top"
+            >רכב</a
+          >
+        </div>
+        <div>
+          <a
+            id="Sy6Piiqcxxl"
+            href="https://www.ynet.co.il/digital"
+            target="_top"
+            >דיגיטל</a
+          >
+        </div>
+        <div>
+          <a id="H10Dsoccgeg" href="https://www.ynet.co.il/laisha" target="_top"
+            >לאשה</a
+          >
+        </div>
+        <div>
+          <a id="SJyewiiq9gll" href="https://www.ynet.co.il/food" target="_top"
+            >אוכל</a
+          >
+        </div>
+        <div>
+          <a
+            id="HJglPii5qexe"
+            href="https://www.ynet.co.il/economy/category/8315"
+            target="_top"
+            >נדל"ן</a
+          >
+        </div>
+      </div>
+      <div id="wcm_MenuDisplay">
+        <span
+          class="moreBtn"
+          id="wcm_MenuDisplay_moreBtn"
+          tabindex="0"
+          role="button"
+          >עוד<span class="moreIcon toOpen"></span
+        ></span>
+      </div>
+    </div>
+
+    <div class="wrapper">
+      <!-- MAIN ARTICLE styled like Ynet -->
+      <div class="top-story">
+        <div class="mediaArea">
+          <a href="#">
+            <img src="6tus.png" alt="ששטוס חוזרת" />
+          </a>
+        </div>
+
+        <div class="textDiv">
+          <div class="topStoryDate">
+            <span>8.5.25</span> <span class="sepLine">|</span>
+            <span>י' באייר התשפ"ה</span>
+          </div>
+
+          <a href="#" style="text-decoration: none; color: inherit">
+            <h1 class="slotTitle">
+              כעשור מאז שהסתיימה – טל מוסרי ינחה את העונה החדשה של ששטוס
+            </h1>
+            <div class="slotSubTitle">
+              בצעד מפתיע, לאחר שהואשם בבגידה חריפה נגד ערוץ הילדים, החליט מוסרי
+              לחזור למקום שבו פרחה הקריירה שלו: "מה טוב לנדוד אך טוב יותר
+              לחזור". ענקית התאגיד "ששטוס" תופיע שוב על המסכים ביוני הקרוב, אלפי
+              ילידי שנות התשיעים נמהרים לחזור לבתי הספר היסודיים רק עבור
+              ההזדמנות להשתתף. "בוא, תפעיל קצת את הראש, כי אין ממה לחשוש", אמרה
+              חברתו דנה פרידר כאשר נשאלה על הקשר שלה לתוכנית ועל ההזדמנות לחזור
+              לערוץ הילדים.
+            </div>
+            <span class="author">מערכת CSnet</span>
+          </a>
+        </div>
+      </div>
+        <div class="top-story">
+          <div class="mediaArea">
+            <a
+              href="https://www.ynet.co.il/entertainment/article/r1hy7ufkxe"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="images.png"
+                alt="משחק הטאקי"
+              />
+            </a>
+          </div>
+
+          <div class="textDiv">
+            <div class="topStoryDate">
+              <span>8.5.25</span> <span class="sepLine">|</span>
+              <span>י' באייר התשפ"ה</span>
+            </div>
+
+            <a
+              href="https://www.ynet.co.il/entertainment/article/r1hy7ufkxe"
+              target="_blank"
+              rel="noopener noreferrer"
+              style="text-decoration: none; color: inherit"
+            >
+              <h1 class="slotTitle">הוכרעה הסוגיה הבוערת ביותר במשחק הטאקי</h1>
+              <div class="slotSubTitle">
+                בפוסט בפייסבוק הבהיר ממציא המשחק חיים שפיר כי קלף משנה-כיוון
+                אינו מחזיר את התור למי שהניח אותו במשחק בן שני משתתפים. "טאקי
+                תמיד לומד מישהו משחקן גדול יותר (בדרך כלל אח גדול)", הסביר שפיר
+                את מקור הטעות, "והאח הגדול תמיד המציא לכם חוקים שעזרו לו לנצח
+                (ואתם המשכתם את המסורת)".
+              </div>
+              <span class="author">מערכת CSnet</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- More Articles -->
+      <div class="articles-grid">
+        <div class="article-card">
+          <h3>סערה פוליטית: דיון חירום בעקבות ההצבעה</h3>
+        </div>
+        <div class="article-card">
+          <h3>התחזית: מזג אוויר קיצי צפוי בסופ"ש</h3>
+        </div>
+        <div class="article-card">
+          <h3>תקלות נרחבות באפליקציית התחבורה</h3>
+        </div>
+        <div class="article-card">
+          <h3>הצלחה לסטארטאפ ישראלי: גיוס של 50 מיליון דולר</h3>
+        </div>
+      </div>
+    </div>
+
+    <footer>© 2025 אתר דמוי YNET. כל הזכויות שמורות.</footer>
+  </body>
+</html>

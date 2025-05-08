@@ -57,7 +57,7 @@ function displayResults(data) {
                 container.appendChild(summaryContainer);
                 
                 const learnMoreLink = document.createElement("a");
-                learnMoreLink.href = "https://www.youtube.com/watch?v=nb-ZsqhR_wc";
+                learnMoreLink.href = "https://futurefreespeech.org/the-disinformation-toolkit/";
                 learnMoreLink.target = "_blank";
                 learnMoreLink.textContent = "Learn more about detecting disinformation online";
                 learnMoreLink.style.display = "block";
