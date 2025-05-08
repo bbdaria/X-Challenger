@@ -2,19 +2,28 @@
 const BACKEND_URL = "https://our-backend-url.com";
 const MIN_IMAGE_SIZE = 264; // Minimum size in pixels to consider an image
 const TEXT_RESPONSE_FORMAT_GOOD = {
-    score: 82,                               
-    summary: "This text discusses the ethical concerns of AI models and their societal impact. It highlights the need for regulation and transparency.", // 🧠 ~60–70 word summary, HARD capped
-    links: [                             
-      "https://relevant-source1.com",
-      "https://relevant-source2.com"
+    score: 82,
+    summary: "This text discusses the ethical concerns of AI models and their societal impact. It highlights the need for regulation and transparency.",
+    supportinglinks: [
+        "https://relevant-source1.com",
+        "https://relevant-source2.com"
+    ],
+    refutinglinks: [
+        "https://counterpoint-example.com",
+        "https://debunking-claim.net/article"
     ]
 };
+
 const TEXT_RESPONSE_FORMAT_BAD = {
-    score: 3,                               
-    summary: "This text discusses the ethical concerns of AI models and their societal impact. It highlights the need for regulation and transparency.", // 🧠 ~60–70 word summary, HARD capped
-    links: [                             
-      "https://relevant-source1.com",
-      "https://relevant-source2.com"
+    score: 3,
+    summary: "This text contains exaggerated or misleading claims about AI capabilities, lacking credible references or factual grounding.",
+    supportinglinks: [
+        "https://dubious-source.com",
+        "https://unclear-report.net"
+    ],
+    refutinglinks: [
+        "https://ai-ethics.org/factcheck",
+        "https://reliable-critique.com/article"
     ]
 };
 
