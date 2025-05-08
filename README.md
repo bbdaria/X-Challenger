@@ -14,4 +14,4 @@ Due to the fact that the users are very lazy the usage should be as simple as po
 
 How do we want to recognize text? the user doesn't need to copy and paste!
 
-![image](https://github.com/user-attachments/assets/5619a4fe-1314-4894-865a-0efae5d03442)
+![image](https://github.com/bbdaria/X-Challenger/blob/main/icon_origin.png)
