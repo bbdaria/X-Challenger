@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "X:Challenger - the ",
+  "version": "1.0",
+  "description": "Scans text and pictures to help you determine their genuinity",
+  "permissions": ["activeTab", "scripting","storage","tabs", "webRequest"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "icons": {
+    "48": "cropped.png"
+  }
+}
