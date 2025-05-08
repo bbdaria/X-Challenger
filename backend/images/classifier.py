@@ -1,70 +1,93 @@
-from typing import Any
-from .static_analyzer import StaticImageAnalyzer
-import torch
-from torchvision import transforms
-from PIL import Image
-import numpy as np
 import os
 import sys
+import argparse
+from pathlib import Path
+from typing import Any, Dict
 
-# Add TrueFake detector to sys.path for import
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../TrueFake-IJCNN25/detector')))
-from networks import ImageClassifier as TrueFakeImageClassifier
+import torch
+from PIL import Image
+from torchvision import transforms
+
+# Static analyzer for metadata/watermarks
+from .static_analyzer import StaticImageAnalyzer
+from .networks import ImageClassifier as TrueFakeImageClassifier
 
 class MinimalSettings:
+    """
+    Settings stub matching TrueFake's expected args for networks.ImageClassifier.
+    Use the same IDs as in training (e.g., 'sd2:pre&...').
+    """
     def __init__(self):
-        self.arch = 'nodown'
+        # Name is unused for inference
+        self.name = 'inference'
+        # Not training, so flags can be default
+        self.arch = 'nodown'  # use 'nodown' to enable prototype branch (E2P)
         self.freeze = False
-        self.prototype = True
+        self.prototype = True  # enable prototype ScoresLayer
         self.num_centers = 1
+        # data_keys not used here
+        self.data_keys = ''
+        self.device = 'cpu'
 
-class ImageClassifier:
-    def __init__(self, model_path: str = None):
-        # Path to the best.pt model
-        MODEL_PATH = model_path or os.path.abspath(os.path.join(os.path.dirname(__file__), 'best.pt'))
+class Wrapper:
+    """
+    Combines static analysis with the learned TrueFake classifier.
+    """
+    def __init__(self, ckpt_path: str = None):
+        # Determine checkpoint location
+        default_ckpt = Path(__file__).resolve().parent / 'best.pt'
+        self.ckpt = Path(ckpt_path) if ckpt_path else default_ckpt
+
+        # Initialize static analyzer
         self.static_analyzer = StaticImageAnalyzer()
-        # Create settings object as expected by the model
+
+        # Build the classifier using stub settings
         settings = MinimalSettings()
-        self.model = TrueFakeImageClassifier(settings)
-        self.model.eval()
-        # Load weights
-        state_dict = torch.load(MODEL_PATH, map_location=torch.device('cpu'))
-        self.model.load_state_dict(state_dict)
-        # Preprocessing pipeline (match what TrueFake expects)
+        self.classifier = TrueFakeImageClassifier(settings)
+        # Load pretrained weights
+        state = torch.load(self.ckpt, map_location='cpu')
+        self.classifier.load_state_dict(state)
+        self.classifier.eval()
+
+        # Preprocessing pipeline matching training setup
         self.transform = transforms.Compose([
-            transforms.Resize((224, 224)),
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            transforms.Normalize(
+                mean=[0.485, 0.456, 0.406],
+                std=[0.229, 0.224, 0.225]
+            ),
         ])
 
-    def classify_image(self, image_path):
-        """
-        Classify a single image as REAL or AI-generated (FAKE).
-        Args:
-            image_path (str): Path to the image file.
-        Returns:
-            dict: static analysis, prediction, score
-        """
-        # Step 1: Static analysis
-        static_results = self.static_analyzer.analyze(image_path)
-        print("Static analysis results:", static_results)
+    def classify_image(self, image_path: str) -> Dict[str, Any]:
+        # 1) Static analysis
+        static_out = self.static_analyzer.analyze(image_path)
+        for res in static_out:
+            if (res.get('analyzer') == 'analyze_metadata' and res.get('ai_related')) or \
+               (res.get('analyzer') == 'detect_watermark' and res.get('found')):
+                return {
+                    'result': 'fake',
+                    'model': res.get('details', 'unknown'),
+                    'prob_fake': 1.0
+                }
 
-        # Load and preprocess the image
+        # 2) CNN inference
         img = Image.open(image_path).convert('RGB')
-        img_tensor = self.transform(img).unsqueeze(0)  # Add batch dimension
-
-        # Predict
+        tensor = self.transform(img).unsqueeze(0)
         with torch.no_grad():
-            logit = self.model(img_tensor)
-            print(f"Raw model output tensor: {logit}")
-            logit_value = float(logit.item())
-            prob_fake = float(torch.sigmoid(logit).item())
-            label = 'FAKE' if logit_value > 0 else 'REAL'
-        print(f"Prediction: {label} (logit: {logit_value:.4f}, prob_fake: {prob_fake:.4f})")
-        return {
-            "static_analysis": static_results,
-            "prediction": label,
-            "logit": logit_value,
-            "prob_fake": prob_fake
-        }
+            out = self.classifier(tensor)
+            prob_fake = float(torch.sigmoid(out * 5).item())
+            result = 'fake' if prob_fake > 0.5 else 'real'
 
+        if result == 'fake':
+            return {
+                'result': 'fake',
+                'model': 'A diffusion model',
+                'prob_fake': prob_fake
+            }
+        else:
+            return {
+                'result': 'real',
+                'prob_fake': prob_fake
+            }
