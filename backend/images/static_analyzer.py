@@ -1,12 +1,36 @@
-from typing import Callable, Dict, List
-from PIL import Image
 import os
+import re
+import io
+from typing import Callable, Dict, List
+from PIL import Image, ExifTags
+import xml.etree.ElementTree as ET
+
+# Optional libraries for advanced detection
+try:
+    from dalle_watermark import WatermarkDecoder
+    DALL_E_DECODER = WatermarkDecoder()
+except ImportError:
+    DALL_E_DECODER = None
+try:
+    import pytesseract
+except ImportError:
+    pytesseract = None
 
 class StaticImageAnalyzer:
+    """
+    Analyze images for static signatures of AI generation:
+      - Invisible watermarks (DALL·E)
+      - C2PA / XMP metadata
+      - EXIF metadata clues (Software, Model, UserComment)
+      - OCR-based visible watermark text
+    """
     def __init__(self):
         self.analyzers: List[Callable[[str], Dict]] = []
-        self.register_analyzer(self.detect_watermark)
-        self.register_analyzer(self.analyze_metadata)
+        self.register_analyzer(self.detect_dalle_watermark)
+        self.register_analyzer(self.detect_c2pa_metadata)
+        self.register_analyzer(self.detect_exif_metadata)
+        self.register_analyzer(self.detect_software_tag)
+        self.register_analyzer(self.detect_ocr_watermark)
 
     def register_analyzer(self, func: Callable[[str], Dict]):
         self.analyzers.append(func)
@@ -17,24 +41,105 @@ class StaticImageAnalyzer:
             try:
                 results.append(analyzer(image_path))
             except Exception as e:
-                results.append({"analyzer": analyzer.__name__, "error": str(e)})
+                results.append({
+                    "analyzer": analyzer.__name__,
+                    "error": str(e)
+                })
         return results
 
     @staticmethod
-    def detect_watermark(image_path: str) -> Dict:
-        # Placeholder: In reality, use OCR or watermark detection libraries
-        # Here, just return a dummy result
-        return {"analyzer": "detect_watermark", "found": False, "details": "No watermark detected (placeholder)"}
+    def detect_dalle_watermark(image_path: str) -> Dict:
+        """
+        Detect invisible watermark used by OpenAI DALL·E (if library installed).
+        Returns confidence score if found.
+        """
+        out = {"analyzer": "detect_dalle_watermark", "found": False}
+        if DALL_E_DECODER is None:
+            out["error"] = "dalle_watermark library not installed"
+            return out
+        img = Image.open(image_path).convert("RGB")
+        score = DALL_E_DECODER.decode(img)
+        if score > 0.75:
+            out.update({"found": True, "score": float(score)})
+        else:
+            out.update({"score": float(score)})
+        return out
 
     @staticmethod
-    def analyze_metadata(image_path: str) -> Dict:
-        # Placeholder: In reality, use exifread or PIL.Image._getexif()
-        try:
-            img = Image.open(image_path)
-            exif = img.getexif()
-            # Example: check for AI-related tags (placeholder logic)
-            ai_tags = [k for k, v in exif.items() if "AI" in str(v).upper()]
-            is_ai = bool(ai_tags)
-            return {"analyzer": "analyze_metadata", "ai_related": is_ai, "details": f"AI tags: {ai_tags}"}
-        except Exception as e:
-            return {"analyzer": "analyze_metadata", "error": str(e)} 
+    def detect_c2pa_metadata(image_path: str) -> Dict:
+        """
+        Scan for C2PA (Content Credentials) XML blocks in file header.
+        """
+        out = {"analyzer": "detect_c2pa_metadata", "found": False}
+        # Read first megabyte for XMP packet
+        with open(image_path, "rb") as f:
+            data = f.read(1024 * 1024)
+        if b"xmlns:c2pa" in data or b"http://c2pa.org" in data:
+            out["found"] = True
+            # Extract minimal XML fragment
+            try:
+                start = data.index(b"<x:xmpmeta")
+                end = data.index(b"</x:xmpmeta>") + len(b"</x:xmpmeta>")
+                xml = data[start:end]
+                tree = ET.fromstring(xml)
+                out["details"] = "C2PA metadata present"
+            except Exception:
+                pass
+        return out
+
+    @staticmethod
+    def detect_exif_metadata(image_path: str) -> Dict:
+        """
+        Inspect EXIF tags for clues: Software, Model, UserComment containing AI-related keywords.
+        """
+        out = {"analyzer": "detect_exif_metadata", "ai_related": False, "tags": []}
+        img = Image.open(image_path)
+        exif = img.getexif()
+        for tag_id, value in exif.items():
+            name = ExifTags.TAGS.get(tag_id, tag_id)
+            try:
+                s = str(value)
+            except Exception:
+                continue
+            # Look for keywords
+            if re.search(r"(AI|STABLEDIFFUSION|DALL.?E|MIDJOURNEY|FLUX)", s, re.IGNORECASE):
+                out["ai_related"] = True
+                out["tags"].append({name: s})
+            elif name.lower() in ("software", "model", "usercomment"):
+                out["tags"].append({name: s})
+        return out
+
+    @staticmethod
+    def detect_software_tag(image_path: str) -> Dict:
+        """
+        Check for EXIF Software tag common to social apps & AI editors.
+        """
+        out = {"analyzer": "detect_software_tag", "found": False, "software": None}
+        img = Image.open(image_path)
+        exif = img.getexif()
+        for tag_id, value in exif.items():
+            name = ExifTags.TAGS.get(tag_id, tag_id)
+            if name == "Software":
+                soft = str(value)
+                out["software"] = soft
+                if any(x in soft for x in ["Instagram", "Facebook", "Snapchat", "Midjourney", "DALL"]):
+                    out["found"] = True
+                break
+        return out
+
+    @staticmethod
+    def detect_ocr_watermark(image_path: str) -> Dict:
+        """
+        Use OCR to find visible watermark text like 'Generated by', 'Midjourney', etc.
+        Requires pytesseract.
+        """
+        out = {"analyzer": "detect_ocr_watermark", "found": False, "text": None}
+        if pytesseract is None:
+            out["error"] = "pytesseract not installed"
+            return out
+        img = Image.open(image_path)
+        text = pytesseract.image_to_string(img)
+        out["text"] = text.strip()
+        if re.search(r"(Generated by|Midjourney|DALL\.?E|Stable Diffusion)", text, re.IGNORECASE):
+            out["found"] = True
+        return out
