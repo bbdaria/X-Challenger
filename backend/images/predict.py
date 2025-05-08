@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 import cv2
 
-MODEL_PATH = 'model/ai_imageclassifier.h5'
+MODEL_PATH = 'ai_imageclassifier.h5'
 
 # Load the model once at module level for efficiency
 model = tf.keras.models.load_model(MODEL_PATH)
