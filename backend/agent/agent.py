@@ -3,12 +3,20 @@ from agents import Agent, Runner
 import os
 
 class OpenAIAgent:
-    def __init__(self, model="o4-mini"):
+    def __init__(self, model="o4-mini", instruction_file="prompt.py"):
         self.model = model
         self.api_key = os.getenv("OPENAI_API_KEY")
         if not self.api_key:
             raise ValueError("OPENAI_API_KEY is not set")
-        self.agent = Agent(name="Assistant", instructions="You are a helpful assistant")
+
+        # Read instructions from file
+        try:
+            with open(instruction_file, "r", encoding="utf-8") as f:
+                instructions = f.read().strip()
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Instruction file '{instruction_file}' not found.")
+
+        self.agent = Agent(name="Assistant", instructions=instructions)
 
     async def act(self, input):
         runner = await Runner(self.agent, input)

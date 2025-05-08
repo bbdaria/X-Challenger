@@ -2,7 +2,7 @@
 # You can register tools using register_tool().
 from agents import FunctionTool
 
-API_KEY = 'YOUR_GOOGLE_API_KEY'
+API_KEY = 'AIzaSyCximcJIGoBex9H43hNoz7WLYnPutrLCZA'
 
 from typing import List, Dict, Any
 
