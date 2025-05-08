@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>X:Challenger Results</title>
+    <style>
+      .progress-container {
+        background: #e0e0e0;
+        border-radius: 25px;
+        overflow: hidden;
+        height: 24px;
+        margin-bottom: 16px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+
+      .progress-bar {
+        height: 100%;
+        line-height: 24px;
+        width: 0%;
+        color: white;
+        text-align: center;
+        font-weight: bold;
+        transition: width 0.5s ease;
+        border-radius: 25px 0 0 25px;
+      }
+
+      .progress-green {
+        background: linear-gradient(to right, #4caf50, #81c784);
+      }
+
+      .progress-red {
+        background: linear-gradient(to right, #f44336, #e57373);
+      }
+
+      .result-image {
+        display: block;
+        margin: 10px auto 20px;
+        max-width: 100px;
+        height: auto;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f5f7fa;
+        color: #333;
+        width: 360px;
+        box-sizing: border-box;
+      }
+      h2 {
+        margin-top: 0;
+        color: #1a73e8;
+      }
+      .score {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .summary {
+        margin-top: 10px;
+      }
+      .links a {
+        display: block;
+        color: #1a0dab;
+        text-decoration: none;
+        margin-top: 5px;
+      }
+      .error {
+        color: red;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Scan Results</h2>
+    <div id="results">Loading...</div>
+    <script src="challenger.js"></script>
+  </body>
+</html>

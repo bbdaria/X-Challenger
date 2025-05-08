@@ -1,7 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "X:Challenger - the ",
+  "name": "X-Challenger",
   "version": "1.0",
+  "web_accessible_resources": [{
+  "resources": ["challenger.html", "src/badCat.png", "src/goodCat.png"],
+  "matches": ["<all_urls>"]
+  }],
   "description": "Scans text and pictures to help you determine their genuinity",
   "permissions": ["activeTab", "scripting","storage","tabs", "contextMenus", "webRequest"],
   "content_scripts": [
@@ -16,14 +20,14 @@
   "action": {
     "default_title": "X-Challenger",
     "default_icon": {
-      "16": "cropped.png",
-      "48": "cropped.png",
-      "128": "cropped.png"
+      "16": "src/x_challenger_16.png",
+      "48": "src/x_challenger_48.png",
+      "128": "src/x_challenger_128.png"
     }
   },
   "icons": {
-    "16": "cropped.png",
-    "48": "cropped.png",
-    "128": "cropped.png"
+    "16": "src/x_challenger_16.png",
+      "48": "src/x_challenger_48.png",
+      "128": "src/x_challenger_128.png"
   }
 }
