@@ -2,6 +2,14 @@
 function displayResults(data) {
     const container = document.getElementById("results");
     container.innerHTML = ""; // Clear loading text
+    // Add subheading under "Scan Results"
+    const verdict = document.createElement("div");
+    verdict.textContent = data.score >= 50 ? "Most likely real" : "Most likely disinformation";
+    verdict.style.fontSize = "18px";
+    verdict.style.fontWeight = "bold";
+    verdict.style.margin = "10px 0";
+    verdict.style.color = data.score >= 50 ? "#2e7d32" : "#c62828"; // green or red
+    container.appendChild(verdict);
 
     if (data.error) {
         container.innerHTML = `<div class="error">${data.error}</div>`;
@@ -14,14 +22,12 @@ function displayResults(data) {
     const progressBar = document.createElement("div");
     progressBar.className = "progress-bar";
     progressBar.style.width = `0%`; // start at 0%
-
     // Apply color
     if (data.score >= 50) {
         progressBar.classList.add("progress-green");
     } else {
         progressBar.classList.add("progress-red");
     }
-
     progressContainer.appendChild(progressBar);
     container.appendChild(progressContainer);
 
