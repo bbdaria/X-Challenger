@@ -25,7 +25,7 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.contextMenus.onClicked.addListener((info, tab) => {
     if (info.menuItemId === "scan-selected-text" && info.selectionText) {
         sendTextToBackend(info.selectionText, tab.id);
-    } else if (info.menuItemId === "scan-image" && info.srcUrl && isVisibleImage(info.srcUrl)) {
+    } else if (info.menuItemId === "scan-image" && info.srcUrl) {
         sendImageToBackend(info.srcUrl, tab.id);
     }
 });
